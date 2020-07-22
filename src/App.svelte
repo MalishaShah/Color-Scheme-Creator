@@ -30,6 +30,7 @@
 	<div class="colors">
 		<div class="color" style="background:rgb({red},{green},{blue})"></div>
 	</div>
+	<!--Challenge 2: Create a way to add blocks and when it is clicked, you can adjust the color, duplicate it, or delete it-->
 	<footer>
 		<p id="message">Created by {fullName}</p>
 	</footer>
