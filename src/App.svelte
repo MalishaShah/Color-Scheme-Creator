@@ -58,11 +58,10 @@
 			</div>
 		{/each}
 	</div>
-	<button on:click={newBlock}>Add a color block</button>
+  <button on:click={newBlock}>Add a color block</button>
 	<footer>
 		<p id="message">Created by {fullName}</p>
 	</footer>
-
 </main>
 
 <style>
