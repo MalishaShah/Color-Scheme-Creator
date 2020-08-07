@@ -23,6 +23,12 @@
 	
 	//Removes button and delete button of a color block
 	const deleteClick = (id) => {
+		if(id === activeId){
+			activeId = undefined;
+		}
+		else if(id < activeId){
+			activeId--;
+		}
 		colors = colors.filter(color => color.id !== id);
 		for(let i = 0; i < colors.length; i++){
 			colors[i].id = i;
@@ -42,6 +48,7 @@
 		}
 		colors = [...colors, color];
 		console.log(colors);
+		activeId = id;
 	};
 </script>
 
@@ -54,23 +61,35 @@
 
 	<!--Use a form to input numbers of RGB values. New challenge is to make a slider-->
 	<!--RGB numbers displayed for the active block(last clicked block)-->
+	<!--If active block was deleted, values are reset to 0 until new block is selected-->
 	<ul>
-		<li>R: <input type="number" min="0" max="255" bind:value={colors[activeId].red}></li>
-		<li>G: <input type="number" min="0" max="255" bind:value={colors[activeId].green}></li>
-		<li>B: <input type="number" min="0" max="255" bind:value={colors[activeId].blue}></li>
+		{#if activeId != undefined} 
+			<li>R: <input type="number" min="0" max="255" bind:value={colors[activeId].red}></li>
+			<li>G: <input type="number" min="0" max="255" bind:value={colors[activeId].green}></li>
+			<li>B: <input type="number" min="0" max="255" bind:value={colors[activeId].blue}></li>
+		{:else}
+			<li>R: <input type="number" min="0" max="0" value=0></li>
+			<li>G: <input type="number" min="0" max="0" value=0></li>
+			<li>B: <input type="number" min="0" max="0" value=0></li>
+		{/if}
 	</ul>
+	
 	
 	<!--Using a loop to create the color blocks and corresponding buttons-->
 	<div class="blocks">
 		{#each colors as color}
 			<div class = "contain">
 			<!--On click handler to set certain block as the one that is now being controlled by the RGB numbers-->
-			<div on:click={updateId(color.id)} class="block" style="background:rgb({color.red},{color.green},{color.blue})"></div>
+			<!--current class to customize CSS properties for active block-->
+			<div on:click={updateId(color.id)} 
+				class="block" style="background:rgb({color.red},{color.green},{color.blue})"
+				class:current="{color.id === activeId}"></div>
 				<button class="delete" on:click={() => deleteClick(color.id)}>Delete</button>
 			</div>
 		{/each}
 	</div>
-  	<button on:click={newBlock}>Add a color block</button>
+  	<button 
+	  on:click={newBlock}>Add a color block</button>
 	<footer>
 		<p id="message">Created by {fullName}</p>
 	</footer>
@@ -85,7 +104,6 @@
 	}
 
 	h2 {
-		color: #ff3e00;
 		font-size: 3em;
 		font-weight: 100;
 		text-transform: uppercase;
@@ -111,8 +129,8 @@
 		margin: 10px;
 	}
 
-	.block:active {
-		border: red solid 2px;
+	.current {
+		border: red solid 3px;
 	}
 
 	footer {
